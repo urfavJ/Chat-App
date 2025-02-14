@@ -1,0 +1,35 @@
+<form #userForm="ngForm" (ngSubmit)="login()" class="md:flex justify-center px-20 bg-white gap-10">
+    <div class="bg-white my-10 rounded w-1/4 flex flex-col gap-3 shadow-sm drop-shadow-md">
+        <div class="text-center">
+            <div class="text-2xl my-2 font-medium">Login</div>
+        </div>
+        <div class="w-full px-4">
+            <mat-form-field class="w-full" appearance="fill">
+                <mat-label>Email</mat-label>
+                <input matInput required #emailModel="ngModel" type="email" name="email" [(ngModel)]="email" placeholder="Email"/>
+                <mat-error *ngIf="emailModel.errors?.['required']">Email is required.</mat-error>
+            </mat-form-field>
+            
+            <mat-form-field class="w-full" appearance="fill">
+                <mat-label>Password</mat-label>
+                <input matInput required #passwordModel="ngModel" [type]="hide() ? 'text' : 'password'" name="password" [(ngModel)]="password" placeholder="Password"/>
+                <mat-error *ngIf="passwordModel.errors?.['required']">Password is required.</mat-error>
+                <mat-icon matSuffix (click)="togglePassword($event)"> 
+                    {{ hide() ? 'visibility' : 'visibility_off' }}
+                </mat-icon>
+            </mat-form-field>
+
+            <button type="submit" [disabled]="!userForm.valid" class="w-full mb-5 bg-blue-900 text-white rounded-md p-2">
+                Login
+            </button>
+
+            <!-- Link do rejestracji -->
+            <div class="text-center mt-3">
+                <p class="text-sm">
+                    Don't have an account? 
+                    <a (click)="goToRegister()" class="text-blue-600 hover:underline">Sign Up</a>
+                </p>
+            </div>
+        </div>
+    </div>
+</form>

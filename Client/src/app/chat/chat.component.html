@@ -1,0 +1,106 @@
+<div class="flex h-screen bg-gray-100">
+  <!-- Lewy panel -->
+  <div class="w-1/4 bge0e0e0 p-4 shadow-md">
+    <div class="flex items-center space-x-3">
+      <img [src]="mainUser?.profileImage" alt="Avatar" class="w-12 h-12 object-cover rounded-full " />
+      <div class="flex items-center justify-between flex-1">
+        <p class="font-medium text-gray-700">{{ mainUser?.fullName }}</p>
+  
+        <div class="relative">
+          <button (click)="toggleMenu()" class="text-gray-500 hover:text-gray-700">
+            <mat-icon>more_vert</mat-icon>
+          </button>
+  
+          <!-- Menu kontekstowe z opcją logout -->
+          <div *ngIf="menuOpen" class="absolute right-0 bg-white shadow-md rounded-lg mt-1 w-32">
+            <button (click)="logout()" class="w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100">Logout</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="mt-4">
+      <input type="text" [(ngModel)]="searchTerm" class="w-full px-3 py-2 bg-gray-200 rounded-lg" placeholder="Search" />
+    </div>
+    <h3 class="mt-4 text-lg font-semibold text-gray-600">friends</h3>
+    <ul class="mt-2">
+      <li *ngFor="let user of filteredUsers()" class="flex items-center p-2 hover:bg-gray-200 rounded-lg cursor-pointer" (click)="setChat(user.id)">
+        <img [src]="user.profilePicture" alt="Avatar" class="w-10 h-10 object-cover rounded-full " />
+        <div class="ml-3 flex-1">
+          <p class="text-gray-600">{{ user.fullName }}</p>
+          <div *ngIf="typingUser && typingUser==user.userName" class="text-xs text-blue-500">
+            <div class="flex space-x-1">
+              <span class="dot"></span>
+              <span class="dot"></span>
+              <span class="dot"></span>
+            </div>
+          </div>
+        </div>
+        <span class="w-3 h-3 rounded-full" [class.bg-green-500]="user.isOnline" [class.bg-gray-400]="!user.isOnline"></span>
+      </li>
+    </ul>
+    <h3 class="mt-4 text-lg font-semibold text-gray-600">Other people</h3>
+    <ul class="mt-2">
+      <app-friends-requests [user]="mainUser" [allUsers]="allUsers"></app-friends-requests>
+    </ul>
+  </div>
+  
+
+  <div class="flex-1 flex flex-col bge0e6f0">
+    <div *ngIf="selectedChatId != null" class="flex flex-col h-full">
+      <div class="flex items-center p-4 bg-white shadow-md border-l border-r border-gray-200">
+        <div class="ml-3">
+          <h3 class="text-lg font-semibold text-gray-800">{{ senderUser?.fullName }}</h3>
+          <p class="text-center text-gray-500">{{ senderUser?.email }}</p>
+        </div>
+      </div>
+  
+      <!-- Okno wiadomości -->
+      <div class="flex-1 overflow-hidden p-4 bgf4f4f4 m-6 rounded-2xl shadow-xl">
+        <div class=" overflow-y-auto h-full rounded-2xl scrollbar-thin scrollbar-thumb-rounded-xl scrollbar-thumb-gray-500 scrollbar-track-gray-200">
+          
+          <div *ngFor="let message of messages" class="flex items-end mb-4 mr-3 ml-3" [class.justify-end]="message.senderId === mainUser?.id">
+            <div class="flex items-center space-x-2">
+              <img *ngIf="message.senderId !== mainUser?.id" [src]="senderUser?.profilePicture" class="w-10 h-10 rounded-full object-cover border-2 border-blue-500" />
+              <div [class.bg-blue-600]="message.senderId === mainUser?.id"
+                   [class.bg-white]="message.senderId !== mainUser?.id"
+                   class="p-3 rounded-lg text-white max-w-xs shadow-lg">
+                <p [class.text-black]="message.senderId !== mainUser?.id">{{ message.content }}</p>
+                <span class="text-xs opacity-75" [class.text-gray-500]="message.senderId !== mainUser?.id">{{ message.createdDate | date:'short' }}</span>
+              </div>
+              <img *ngIf="message.senderId === mainUser?.id" [src]="mainUser?.profileImage" class="w-10 h-10 rounded-full object-cover border-2 border-blue-500" />
+            </div>
+          </div>
+          <div *ngIf="typingUser" class="text-sm text-blue-500">
+            <div class="flex items-center space-x-2">
+              <img [src]="senderUser?.profilePicture" class="w-10 h-10 rounded-full border-2 object-cover border-blue-500" />
+              <div class="p-3 rounded-lg max-w-xs shadow-lg bg-gray-300">
+                <div class="flex space-x-1">
+                  <span class="dot"></span>
+                  <span class="dot"></span>
+                  <span class="dot"></span>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+        </div>
+      </div>
+  
+      <!-- Input -->
+      <div class="p-4 bg-white shadow-md flex items-center border-l border-r border-gray-200">
+        <input type="text" (input)="onTyping()" [(ngModel)]="newMessage" class="flex-1 px-4 py-2 bg-gray-300 rounded-full outline-none" placeholder="Type message..." />
+        <button (click)="sendMessage()" class="ml-3 px-4 py-2 flex items-center justify-center">
+          <mat-icon class="text-3xl">send</mat-icon>
+        </button>
+      </div>
+    </div>
+  </div>
+  
+
+  <!-- Prawy panel użytkownika -->
+    <div *ngIf="senderUser" class="w-1/4 f8fbfc p-4  shadow-md">
+      <img [src]="senderUser?.profilePicture" class="w-60 h-60 mx-auto rounded-full mt-10" />
+      <h3 class="text-center mt-7 text-lg font-semibold text-gray-800">{{ senderUser?.fullName }}</h3>
+      <p class="text-center text-gray-500 mt-5">{{ senderUser?.email }}</p>
+    </div>
+</div>

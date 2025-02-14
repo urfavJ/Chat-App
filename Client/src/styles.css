@@ -1,0 +1,27 @@
+/* You can add global styles to this file, and also import other style files */
+@import "tailwindcss";
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  
+  /* Tło suwaka */
+  ::-webkit-scrollbar-track {
+    background: #f3f4f6; /* Tailwind bg-gray-200 */
+    border-radius: 10px;
+  }
+  
+  /* Wewnętrzny pasek suwaka */
+  ::-webkit-scrollbar-thumb {
+    background: gray; /* Tailwind blue-500 */
+    border-radius: 10px;
+    border: 2px solid #f3f4f6;
+  }
+  
+  /* Styl suwaka po najechaniu */
+  ::-webkit-scrollbar-thumb:hover {
+    background: black; /* Tailwind blue-600 */
+  }
