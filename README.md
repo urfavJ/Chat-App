@@ -9,6 +9,7 @@ A real-time messaging application built using **ASP.NET Core Web API**, **Signal
 - ✅ **Notifications** – Get notified when a friend logs in  
 
 ## UI Overview  
+> 📌 *Click on the images for better quality!*
 <ul>  
   <li><strong>Main Screen:</strong>  
     <ul>  
